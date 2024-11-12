@@ -1,0 +1,9 @@
+#!/usr/bin/sh
+
+python manage.py shell << EOF
+import os
+
+from helios_auth.models import User
+
+User.objects.get_or_create(user_type="password", user_id="admin", name="Administrator", info={"password": os.environ["ADMIN_PASSWORD"]}, admin_p=True)
+EOF
