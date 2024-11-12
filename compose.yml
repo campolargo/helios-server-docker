@@ -1,0 +1,41 @@
+services:
+    python:
+        container_name: helios_python
+        pull_policy: never
+        build: .
+        image: helios_python
+        restart: always
+        user: 1000:1000
+        ports:
+          - 80:80
+        volumes:
+          - ./helios-server/:/usr/src/app/:ro
+        environment:
+            DEBUG: 0
+            DATABASE_URL: "postgres://helios:${POSTGRES_PASSWORD}@helios_postgres/helios"
+            SECRET_KEY: "${SECRET_KEY}"
+            ALLOWED_HOSTS: "${HOSTNAME}"
+            SSL: 1
+            HSTS: 1
+            URL_HOST: "https://${HOSTNAME}"
+            CELERY_BROKER_URL: "amqp://helios:${RABBITMQ_DEFAULT_PASS}@helios_rabbitmq"
+        depends_on:
+          - postgres
+          - rabbitmq
+    postgres:
+        container_name: helios_postgres
+        image: postgres:alpine
+        restart: always
+        volumes:
+          - ./data/:/var/lib/postgresql/data/
+        environment:
+            POSTGRES_USER: helios
+            POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+            POSTGRES_DB: helios
+    rabbitmq:
+        container_name: helios_rabbitmq
+        image: rabbitmq:alpine
+        restart: always
+        environment:
+            RABBITMQ_DEFAULT_USER: helios
+            RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
