@@ -27,6 +27,7 @@ services:
         container_name: helios_postgres
         image: postgres:alpine
         restart: always
+        user: 1000:1000
         volumes:
           - ./data/:/var/lib/postgresql/data/
         environment:
@@ -37,6 +38,7 @@ services:
         container_name: helios_rabbitmq
         image: rabbitmq:alpine
         restart: always
+        user: 1000:1000
         environment:
             RABBITMQ_DEFAULT_USER: helios
             RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
