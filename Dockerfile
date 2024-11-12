@@ -1,4 +1,4 @@
-FROM python:alpine
+FROM python:3.10-alpine
 
 RUN apk add libpq-dev gcc musl-dev openldap-dev
 
