@@ -12,4 +12,4 @@ COPY --chmod=555 helios_create_admin /bin/
 
 EXPOSE 80
 
-CMD sh -c "python manage.py makemigrations && python manage.py migrate && helios_create_admin && python manage.py runserver 0.0.0.0:80"
+CMD sh -c "python manage.py makemigrations && python manage.py migrate && helios_create_admin && (python manage.py runserver 0.0.0.0:80 & celery -A helios worker)"
